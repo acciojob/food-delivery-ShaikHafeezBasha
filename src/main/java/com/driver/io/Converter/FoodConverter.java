@@ -5,7 +5,9 @@ import com.driver.io.entity.FoodEntity;
 import com.driver.model.request.FoodDetailsRequestModel;
 import com.driver.model.response.FoodDetailsResponse;
 import com.driver.shared.dto.FoodDto;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class FoodConverter {
     public static FoodDto convertEntityToDto(FoodEntity food) {
         return FoodDto.builder()

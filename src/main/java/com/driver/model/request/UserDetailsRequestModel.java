@@ -1,5 +1,9 @@
 package com.driver.model.request;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserDetailsRequestModel {
 
 	private String firstName;
