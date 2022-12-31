@@ -1,4 +1,4 @@
-package com.driver.io.Converter;
+package com.driver.Converter;
 
 
 import com.driver.io.entity.FoodEntity;
@@ -9,24 +9,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class FoodConverter {
-    public static FoodDto convertEntityToDto(FoodEntity food) {
-        return FoodDto.builder()
-                .foodName(food.getFoodName())
-                .foodPrice(food.getFoodPrice())
-                .foodCategory(food.getFoodCategory())
-                .build();
-    }
 
-    public static FoodDetailsResponse convertDtoToResponse(FoodDto food) {
-        return FoodDetailsResponse.builder()
-                .foodId(food.getFoodId())
-                .foodName(food.getFoodName())
-                .foodPrice(food.getFoodPrice())
-                .foodCategory(food.getFoodCategory())
-                .build();
-    }
-
-    public static FoodDto convertRequestToDto(FoodDetailsRequestModel food) {
+    public static FoodDto convertRequestModelToDto(FoodDetailsRequestModel food) {
         return FoodDto.builder()
                 .foodName(food.getFoodName())
                 .foodCategory(food.getFoodCategory())
@@ -36,9 +20,28 @@ public class FoodConverter {
 
     public static FoodEntity convertDtoToEntity(FoodDto food) {
         return FoodEntity.builder()
+                .foodId(food.getFoodId())
                 .foodName(food.getFoodName())
-                .foodPrice(food.getFoodPrice())
                 .foodCategory(food.getFoodCategory())
+                .foodPrice(food.getFoodPrice())
+                .build();
+    }
+
+    public static FoodDto convertEntityToDto(FoodEntity food) {
+        return FoodDto.builder()
+                .foodId(food.getFoodId())
+                .foodName(food.getFoodName())
+                .foodCategory(food.getFoodCategory())
+                .foodPrice(food.getFoodPrice())
+                .build();
+    }
+
+    public static FoodDetailsResponse convertDtoToResponse(FoodDto food) {
+        return FoodDetailsResponse.builder()
+                .foodId(food.getFoodId())
+                .foodName(food.getFoodName())
+                .foodCategory(food.getFoodCategory())
+                .foodPrice(food.getFoodPrice())
                 .build();
     }
 }

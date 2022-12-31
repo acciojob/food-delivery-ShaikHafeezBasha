@@ -1,4 +1,5 @@
 package com.driver.model.request;
+
 import lombok.*;
 
 @AllArgsConstructor

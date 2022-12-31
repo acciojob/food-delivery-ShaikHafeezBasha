@@ -1,15 +1,10 @@
 package com.driver.service.impl;
 
-import com.driver.io.Converter.FoodConverter;
-
-import com.driver.io.Converter.RandomStringGenerator;
+import com.driver.Converter.FoodConverter;
 import com.driver.io.entity.FoodEntity;
-
 import com.driver.io.repository.FoodRepository;
-
 import com.driver.service.FoodService;
 import com.driver.shared.dto.FoodDto;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,75 +13,45 @@ import java.util.List;
 
 @Service
 public class FoodServiceImpl implements FoodService {
+
     @Autowired
     FoodRepository foodRepository;
-
-    @Autowired
-    RandomStringGenerator randomStringGenerator;
-
     @Override
-    public FoodDto createFood(FoodDto food)  {
-        FoodEntity foodPresent = foodRepository.findByFoodId(food.getFoodId());
-        if (foodPresent != null) {
-            throw new RuntimeException("Food already exists...!!");
-        }
-        FoodEntity foodEntity = FoodConverter.convertDtoToEntity(food);
-        foodEntity.setFoodId(randomStringGenerator.generateFoodId(30));
-        foodEntity = foodRepository.save(foodEntity);
-
-
+    public FoodDto createFood(FoodDto food) {
+        FoodEntity foodEntity = foodRepository.save(FoodConverter.convertDtoToEntity(food));
         return FoodConverter.convertEntityToDto(foodEntity);
-
     }
 
     @Override
     public FoodDto getFoodById(String foodId) throws Exception {
-        FoodEntity food = foodRepository.findByFoodId(foodId);
-        if (food == null) {
-            throw new Exception("Food not found...!!");
-        }
-        return FoodConverter.convertEntityToDto(food);
-
+        FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
+        return FoodConverter.convertEntityToDto(foodEntity);
     }
 
     @Override
     public FoodDto updateFoodDetails(String foodId, FoodDto foodDetails) throws Exception {
-        long id = foodRepository.findByFoodId(foodId).getId();
-        if (id<=0 ) {
-            throw new Exception("food Not Found...!!");
-        }
-        FoodEntity food = FoodEntity.builder()
-                .id(id)
-                .foodName(foodDetails.getFoodName())
-                .foodCategory(foodDetails.getFoodCategory())
-                .foodPrice(foodDetails.getFoodPrice())
-                .foodId(foodId)
-                .build();
-        food = foodRepository.save(food);
-        return FoodConverter.convertEntityToDto(food);
+        FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
+        foodEntity.setFoodCategory(foodDetails.getFoodCategory());
+        foodEntity.setFoodName(foodDetails.getFoodName());
+        foodEntity.setFoodPrice(foodDetails.getFoodPrice());
 
+        foodRepository.save(foodEntity);
+        return FoodConverter.convertEntityToDto(foodEntity);
     }
 
     @Override
-    public void deleteFoodItem(String foodId) throws Exception {
-        FoodEntity food = foodRepository.findByFoodId(foodId);
-        if (food == null)
-            throw new Exception("food not found!....");
-        long id = food.getId();
-        foodRepository.deleteById(id);
-
+    public void deleteFoodItem(String id) throws Exception {
+        foodRepository.deleteById(Long.valueOf(id));
     }
 
     @Override
     public List<FoodDto> getFoods() {
-        List<FoodDto> foodList = new ArrayList<>();
-        List<FoodEntity> foodlist;
-        foodlist= (List<FoodEntity>) foodRepository.findAll();
+        List<FoodDto> foodDto = new ArrayList<>();
+        List<FoodEntity> foodEntity = (List<FoodEntity>) foodRepository.findAll();
 
-        for (FoodEntity foodEntity : foodlist) {
-            FoodDto foodDto = FoodConverter.convertEntityToDto(foodEntity);
-            foodList.add(foodDto);
+        for(FoodEntity food : foodEntity) {
+            foodDto.add(FoodConverter.convertEntityToDto(food));
         }
-        return foodList;
+        return foodDto;
     }
 }
